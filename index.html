@@ -67,14 +67,16 @@
 
     .title-screen {
       background:
-        linear-gradient(rgba(8, 13, 25, 0.16), rgba(8, 13, 25, 0.52)),
-        radial-gradient(circle at 50% 18%, rgba(255, 255, 255, 0.18), transparent 26%);
+        linear-gradient(rgba(255, 247, 223, 0.12), rgba(255, 215, 122, 0.26)),
+        radial-gradient(circle at 50% 16%, rgba(255, 255, 255, 0.42), transparent 30%);
     }
 
     .title-block {
-      margin-top: 54px;
+      margin-top: 42px;
       text-align: center;
-      text-shadow: 0 4px 0 rgba(0, 0, 0, 0.24);
+      text-shadow:
+        0 4px 0 rgba(255, 146, 83, 0.52),
+        0 7px 18px rgba(80, 48, 22, 0.22);
     }
 
     .brand {
@@ -83,13 +85,17 @@
       line-height: 1.02;
       letter-spacing: 0;
       font-weight: 900;
+      color: #fff9e8;
     }
 
     .subtitle {
       margin: 10px 0 0;
       font-size: 18px;
-      font-weight: 800;
-      color: #ffe66d;
+      font-weight: 900;
+      color: #25335b;
+      text-shadow:
+        0 2px 0 rgba(255, 255, 255, 0.8),
+        0 4px 8px rgba(255, 159, 67, 0.28);
     }
 
     .title-actions {
@@ -117,25 +123,27 @@
 
     .start-button {
       min-height: 60px;
-      background: var(--accent);
+      background: linear-gradient(#ffe66d, #ffb347);
       font-size: 22px;
+      border: 3px solid #fff6d8;
     }
 
     .menu-grid {
       display: grid;
       grid-template-columns: repeat(5, minmax(0, 1fr));
-      gap: 7px;
+      gap: 8px;
     }
 
     .menu-grid button {
-      min-height: 50px;
-      padding: 4px 2px;
-      color: var(--ink);
-      background: var(--panel);
-      border: 1px solid rgba(255, 255, 255, 0.18);
+      min-height: 56px;
+      padding: 5px 3px;
+      color: #26345d;
+      background: linear-gradient(#ffffff, #dff7ff);
+      border: 2px solid rgba(255, 255, 255, 0.9);
       font-size: 12px;
-      line-height: 1.1;
-      box-shadow: 0 4px 0 rgba(0, 0, 0, 0.26);
+      line-height: 1.12;
+      text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
+      box-shadow: 0 5px 0 rgba(62, 113, 147, 0.34);
     }
 
     .race-ui {
@@ -153,17 +161,18 @@
 
     .hud-item {
       min-height: 42px;
-      padding: 5px 6px;
+      padding: 6px 6px;
       border-radius: 8px;
-      background: rgba(14, 22, 34, 0.74);
-      border: 1px solid rgba(255, 255, 255, 0.18);
+      background: linear-gradient(#fffdf0, #ffe9a8);
+      border: 3px solid rgba(255, 255, 255, 0.94);
       text-align: center;
-      text-shadow: 0 2px 0 rgba(0, 0, 0, 0.32);
+      box-shadow: 0 4px 0 rgba(86, 72, 45, 0.26);
+      text-shadow: none;
     }
 
     .hud-label {
       display: block;
-      color: #9ee7ff;
+      color: #2f6f9f;
       font-size: 10px;
       font-weight: 900;
     }
@@ -173,6 +182,7 @@
       margin-top: 1px;
       font-size: 18px;
       font-weight: 900;
+      color: #1f2d4d;
     }
 
     .jump-button {
@@ -182,7 +192,8 @@
       width: 84px;
       height: 84px;
       border-radius: 50%;
-      background: var(--accent-2);
+      background: radial-gradient(circle at 32% 25%, #f9ffff, #69dbd2 52%, #2fafa6);
+      border: 3px solid rgba(255, 255, 255, 0.88);
       pointer-events: auto;
       font-size: 15px;
     }
@@ -303,10 +314,10 @@
       function makeObjects() {
         const objects = [];
         for (let i = 0; i < 54; i += 1) {
-          const kindRoll = i % 6;
+          const kindRoll = i % 8;
           objects.push({
             id: i,
-            kind: kindRoll === 0 ? "block" : kindRoll === 3 ? "enemy" : "star",
+            kind: kindRoll === 0 ? "block" : kindRoll === 3 ? "enemy" : kindRoll === 5 ? "jumpPad" : "star",
             lane: [-0.72, 0, 0.72][(i * 7) % 3],
             distance: 260 + i * 155 + (i % 4) * 38,
             taken: false
@@ -352,25 +363,87 @@
         return { x, y, scale, roadHalf };
       }
 
-      function drawSky() {
+      function drawRoomBackground(isTitle = false) {
         const sky = ctx.createLinearGradient(0, 0, 0, HORIZON + 90);
-        sky.addColorStop(0, "#61c7ef");
-        sky.addColorStop(0.72, "#b8f2ff");
-        sky.addColorStop(1, "#f7f4c8");
+        sky.addColorStop(0, isTitle ? "#ffe7a8" : "#bdeeff");
+        sky.addColorStop(0.62, isTitle ? "#ffd3d9" : "#e9fbff");
+        sky.addColorStop(1, "#fff4d2");
         ctx.fillStyle = sky;
         ctx.fillRect(0, 0, VIEW_W, VIEW_H);
 
-        ctx.fillStyle = "#fff1a8";
+        ctx.fillStyle = "#ffef98";
         ctx.beginPath();
-        ctx.arc(326, 78, 30, 0, Math.PI * 2);
+        ctx.arc(326, 70, isTitle ? 38 : 28, 0, Math.PI * 2);
         ctx.fill();
 
-        ctx.fillStyle = "#5eb56d";
+        ctx.fillStyle = "#fff9e8";
+        ctx.fillRect(34, 52, 126, 86);
+        ctx.fillStyle = "#85d9ff";
+        ctx.fillRect(42, 60, 52, 70);
+        ctx.fillRect(100, 60, 52, 70);
+        ctx.strokeStyle = "#e8a55d";
+        ctx.lineWidth = 5;
+        ctx.strokeRect(34, 52, 126, 86);
+        ctx.beginPath();
+        ctx.moveTo(97, 55);
+        ctx.lineTo(97, 136);
+        ctx.moveTo(39, 95);
+        ctx.lineTo(156, 95);
+        ctx.stroke();
+        ctx.fillStyle = "rgba(255, 255, 255, 0.42)";
+        ctx.fillRect(48, 66, 24, 10);
+        ctx.fillRect(108, 66, 24, 10);
+
+        ctx.fillStyle = "#9a6b4f";
+        ctx.fillRect(238, 126, 104, 56);
+        ctx.fillStyle = "#72503f";
+        ctx.fillRect(248, 116, 84, 22);
+        ctx.fillStyle = "#f2b36b";
+        ctx.fillRect(252, 138, 28, 34);
+        ctx.fillRect(298, 138, 28, 34);
+
+        ctx.fillStyle = "#6f5c47";
+        ctx.fillRect(14, 170, 76, 12);
+        ctx.fillRect(24, 182, 8, 42);
+        ctx.fillRect(72, 182, 8, 42);
+        ctx.fillStyle = "#f7c9d3";
+        ctx.beginPath();
+        ctx.roundRect(16, 144, 72, 30, 8);
+        ctx.fill();
+
+        ctx.fillStyle = "#c27842";
+        ctx.fillRect(328, 184, 30, 42);
+        ctx.fillStyle = "#3b9d5a";
+        for (const leaf of [[329, 174, 18, 8, -0.6], [357, 174, 18, 8, 0.6], [342, 154, 15, 8, 0], [333, 160, 14, 7, -0.9], [354, 160, 14, 7, 0.9]]) {
+          ctx.save();
+          ctx.translate(leaf[0], leaf[1]);
+          ctx.rotate(leaf[4]);
+          ctx.beginPath();
+          ctx.ellipse(0, 0, leaf[2], leaf[3], 0, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+        }
+
+        ctx.fillStyle = "#f05d5e";
+        ctx.beginPath();
+        ctx.arc(72, 250, 13, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = "#5ac8fa";
+        ctx.fillRect(290, 238, 28, 28);
+        ctx.fillStyle = "#ffd166";
+        ctx.beginPath();
+        ctx.moveTo(48, 294);
+        ctx.lineTo(76, 294);
+        ctx.lineTo(62, 272);
+        ctx.closePath();
+        ctx.fill();
+
+        ctx.fillStyle = isTitle ? "#f8d99b" : "#69b86e";
         ctx.beginPath();
         ctx.moveTo(0, HORIZON + 36);
-        ctx.lineTo(80, HORIZON - 18);
+        ctx.lineTo(82, HORIZON + 2);
         ctx.lineTo(158, HORIZON + 34);
-        ctx.lineTo(234, HORIZON - 28);
+        ctx.lineTo(234, HORIZON - 4);
         ctx.lineTo(390, HORIZON + 46);
         ctx.lineTo(390, VIEW_H);
         ctx.lineTo(0, VIEW_H);
@@ -379,10 +452,10 @@
       }
 
       function drawRoad() {
-        ctx.fillStyle = "#2f9957";
+        ctx.fillStyle = "#f3c982";
         ctx.fillRect(0, HORIZON, VIEW_W, VIEW_H - HORIZON);
 
-        ctx.fillStyle = "#5a5268";
+        ctx.fillStyle = "#65b7db";
         ctx.beginPath();
         ctx.moveTo(VIEW_W / 2 - ROAD_TOP, HORIZON);
         ctx.lineTo(VIEW_W / 2 + ROAD_TOP, HORIZON);
@@ -400,7 +473,7 @@
           const half1 = lerp(ROAD_BOTTOM, ROAD_TOP, near);
           const half2 = lerp(ROAD_BOTTOM, ROAD_TOP, far);
 
-          ctx.fillStyle = i % 2 === 0 ? "#fff7df" : "#f25555";
+          ctx.fillStyle = i % 2 === 0 ? "#fff7df" : "#ff8fab";
           ctx.beginPath();
           ctx.moveTo(VIEW_W / 2 - half1, y1);
           ctx.lineTo(VIEW_W / 2 - half1 + 16, y1);
@@ -418,7 +491,7 @@
           ctx.fill();
         }
 
-        ctx.strokeStyle = "rgba(255, 255, 255, 0.45)";
+        ctx.strokeStyle = "rgba(255, 255, 255, 0.62)";
         ctx.lineWidth = 2;
         for (const lane of [-0.36, 0.36]) {
           ctx.beginPath();
@@ -442,7 +515,7 @@
         ctx.translate(x, y);
         ctx.rotate(performance.now() / 260);
         ctx.fillStyle = "#ffdf3f";
-        ctx.strokeStyle = "#8a5d00";
+        ctx.strokeStyle = "#d98200";
         ctx.lineWidth = Math.max(1, size * 0.08);
         ctx.beginPath();
         for (let i = 0; i < 10; i += 1) {
@@ -459,6 +532,10 @@
         ctx.closePath();
         ctx.fill();
         ctx.stroke();
+        ctx.fillStyle = "rgba(255, 255, 255, 0.78)";
+        ctx.beginPath();
+        ctx.arc(-size * 0.18, -size * 0.16, size * 0.12, 0, Math.PI * 2);
+        ctx.fill();
         ctx.restore();
       }
 
@@ -470,68 +547,143 @@
         }
 
         if (object.kind === "enemy") {
-          ctx.fillStyle = "#7f4ad8";
+          ctx.fillStyle = "#8d69e8";
           ctx.beginPath();
           ctx.arc(point.x, point.y - size * 0.34, size * 0.38, 0, Math.PI * 2);
           ctx.fill();
+          ctx.fillStyle = "#7a5dd5";
+          ctx.beginPath();
+          ctx.arc(point.x - size * 0.28, point.y - size * 0.62, size * 0.16, 0, Math.PI * 2);
+          ctx.arc(point.x + size * 0.28, point.y - size * 0.62, size * 0.16, 0, Math.PI * 2);
+          ctx.fill();
           ctx.fillStyle = "#fff7df";
-          ctx.fillRect(point.x - size * 0.2, point.y - size * 0.42, size * 0.12, size * 0.12);
-          ctx.fillRect(point.x + size * 0.08, point.y - size * 0.42, size * 0.12, size * 0.12);
+          ctx.beginPath();
+          ctx.arc(point.x - size * 0.14, point.y - size * 0.42, size * 0.07, 0, Math.PI * 2);
+          ctx.arc(point.x + size * 0.14, point.y - size * 0.42, size * 0.07, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = "#4a377c";
+          ctx.lineWidth = Math.max(1, size * 0.04);
+          ctx.beginPath();
+          ctx.arc(point.x, point.y - size * 0.25, size * 0.12, 0, Math.PI);
+          ctx.stroke();
           return;
         }
 
-        ctx.fillStyle = "#d9534f";
-        ctx.fillRect(point.x - size * 0.45, point.y - size * 0.78, size * 0.9, size * 0.74);
-        ctx.fillStyle = "rgba(255, 255, 255, 0.22)";
-        ctx.fillRect(point.x - size * 0.36, point.y - size * 0.7, size * 0.74, size * 0.16);
+        if (object.kind === "jumpPad") {
+          ctx.fillStyle = "#6ee7f2";
+          ctx.beginPath();
+          ctx.roundRect(point.x - size * 0.46, point.y - size * 0.28, size * 0.92, size * 0.3, size * 0.08);
+          ctx.fill();
+          ctx.fillStyle = "#fff7df";
+          ctx.beginPath();
+          ctx.moveTo(point.x, point.y - size * 0.72);
+          ctx.lineTo(point.x - size * 0.25, point.y - size * 0.32);
+          ctx.lineTo(point.x + size * 0.25, point.y - size * 0.32);
+          ctx.closePath();
+          ctx.fill();
+          ctx.strokeStyle = "#2c9aa8";
+          ctx.lineWidth = Math.max(1, size * 0.05);
+          ctx.stroke();
+          return;
+        }
+
+        ctx.fillStyle = "#ff9f68";
+        ctx.beginPath();
+        ctx.roundRect(point.x - size * 0.45, point.y - size * 0.78, size * 0.9, size * 0.74, size * 0.08);
+        ctx.fill();
+        ctx.fillStyle = "#ffd166";
+        ctx.fillRect(point.x - size * 0.34, point.y - size * 0.68, size * 0.68, size * 0.14);
+        ctx.fillStyle = "#fff7df";
+        ctx.beginPath();
+        ctx.arc(point.x - size * 0.16, point.y - size * 0.36, size * 0.05, 0, Math.PI * 2);
+        ctx.arc(point.x + size * 0.16, point.y - size * 0.36, size * 0.05, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = "#9d5630";
+        ctx.lineWidth = Math.max(1, size * 0.035);
+        ctx.strokeRect(point.x - size * 0.45, point.y - size * 0.78, size * 0.9, size * 0.74);
       }
 
       function drawPlayer() {
         const baseX = VIEW_W / 2 + player.lane * 118;
-        const baseY = VIEW_H - 118 - player.jump * 52;
+        const floatHeight = player.jump * 70;
+        const baseY = VIEW_H - 118 - floatHeight;
         const squash = player.jump > 0 ? 1 : 1 + Math.sin(performance.now() / 100) * 0.03;
+
+        const shadowScale = clamp(1 - player.jump * 0.32, 0.46, 1);
+        ctx.fillStyle = `rgba(35, 31, 32, ${0.26 * shadowScale})`;
+        ctx.beginPath();
+        ctx.ellipse(baseX, VIEW_H - 64, 44 * shadowScale, 12 * shadowScale, 0, 0, Math.PI * 2);
+        ctx.fill();
 
         ctx.save();
         ctx.translate(baseX, baseY);
         ctx.scale(1, squash);
 
-        ctx.fillStyle = "rgba(0, 0, 0, 0.22)";
+        ctx.fillStyle = "#3aa0ff";
         ctx.beginPath();
-        ctx.ellipse(0, 54 + player.jump * 52, 42, 12, 0, 0, Math.PI * 2);
+        ctx.ellipse(-30, -24, 14, 24, -0.65, 0, Math.PI * 2);
+        ctx.ellipse(30, -24, 14, 24, 0.65, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = "#86d8ff";
+        ctx.beginPath();
+        ctx.ellipse(-28, -21, 7, 14, -0.65, 0, Math.PI * 2);
+        ctx.ellipse(28, -21, 7, 14, 0.65, 0, Math.PI * 2);
         ctx.fill();
 
-        ctx.fillStyle = "#ff8c42";
+        ctx.fillStyle = "#ffd84f";
         ctx.beginPath();
         ctx.arc(0, 0, 38, 0, Math.PI * 2);
         ctx.fill();
 
-        ctx.fillStyle = "#f25f5c";
+        ctx.fillStyle = "#111827";
         ctx.beginPath();
-        ctx.arc(0, -10, 29, Math.PI, 0);
+        ctx.roundRect(-26, -16, 52, 34, 14);
         ctx.fill();
 
-        ctx.fillStyle = "#22304a";
-        ctx.fillRect(-28, 5, 56, 18);
-        ctx.fillStyle = "#ffe66d";
-        ctx.fillRect(-17, 12, 34, 8);
-
-        ctx.fillStyle = "#ffffff";
-        ctx.fillRect(-22, -10, 12, 12);
-        ctx.fillRect(10, -10, 12, 12);
+        ctx.fillStyle = "#fff7df";
+        ctx.beginPath();
+        ctx.arc(-12, -4, 7, 0, Math.PI * 2);
+        ctx.arc(12, -4, 7, 0, Math.PI * 2);
+        ctx.fill();
         ctx.fillStyle = "#1d2738";
-        ctx.fillRect(-18, -7, 6, 8);
-        ctx.fillRect(14, -7, 6, 8);
+        ctx.beginPath();
+        ctx.arc(-10, -3, 3, 0, Math.PI * 2);
+        ctx.arc(10, -3, 3, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = "#fff7df";
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.arc(0, 6, 9, 0.1, Math.PI - 0.1);
+        ctx.stroke();
 
-        ctx.fillStyle = "#2b3146";
-        ctx.fillRect(-24, 34, 16, 18);
-        ctx.fillRect(8, 34, 16, 18);
+        ctx.fillStyle = "#f4b000";
+        ctx.beginPath();
+        ctx.ellipse(-18, 34, 13, 16, 0, 0, Math.PI * 2);
+        ctx.ellipse(18, 34, 13, 16, 0, 0, Math.PI * 2);
+        ctx.fill();
 
         ctx.restore();
       }
 
       function drawTitleScene() {
-        drawSky();
-        drawRoad();
+        drawRoomBackground(true);
+        ctx.fillStyle = "rgba(255, 255, 255, 0.34)";
+        ctx.beginPath();
+        ctx.roundRect(34, 334, 322, 150, 18);
+        ctx.fill();
+        ctx.fillStyle = "#f08fb5";
+        ctx.beginPath();
+        ctx.arc(104, 422, 28, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = "#69d2e7";
+        ctx.fillRect(256, 390, 48, 48);
+        ctx.fillStyle = "#f9d56e";
+        ctx.beginPath();
+        ctx.moveTo(190, 350);
+        ctx.lineTo(224, 414);
+        ctx.lineTo(156, 414);
+        ctx.closePath();
+        ctx.fill();
         player.distance += 0.9;
         const demoPoint = project(135, Math.sin(performance.now() / 800) * 0.55);
         drawStar(demoPoint.x, demoPoint.y - 34, 22);
@@ -581,6 +733,10 @@
               object.taken = true;
               player.stars += 1;
               player.speed = Math.min(150, player.speed + 8);
+            } else if (object.kind === "jumpPad") {
+              object.taken = true;
+              player.jumpVelocity = Math.max(player.jumpVelocity, 11.5);
+              player.speed = Math.min(154, player.speed + 12);
             } else if (player.hitCooldown <= 0 && !(player.jump > 0.45 && object.kind === "block")) {
               player.speed = 38;
               player.hitCooldown = 0.9;
@@ -594,7 +750,7 @@
       }
 
       function drawRace() {
-        drawSky();
+        drawRoomBackground(false);
         drawRoad();
 
         const visible = worldObjects
