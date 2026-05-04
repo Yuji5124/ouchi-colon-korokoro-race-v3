@@ -788,6 +788,81 @@
       background: linear-gradient(#ffd3d9, #ff9f9f);
     }
 
+    .notice-screen {
+      gap: 12px;
+      justify-content: flex-start;
+      padding: max(14px, env(safe-area-inset-top)) 14px max(14px, env(safe-area-inset-bottom));
+      background:
+        linear-gradient(rgba(255, 246, 216, 0.88), rgba(218, 244, 255, 0.76)),
+        radial-gradient(circle at 18% 10%, rgba(255, 255, 255, 0.76), transparent 28%);
+      color: #26345d;
+      pointer-events: auto;
+    }
+
+    .notice-title {
+      margin: 2px 0 0;
+      color: #26345d;
+      font-size: 25px;
+      line-height: 1;
+      font-weight: 950;
+      text-align: center;
+      text-shadow: 0 2px 0 rgba(255, 255, 255, 0.86);
+    }
+
+    .notice-list {
+      display: grid;
+      gap: 10px;
+      max-height: 610px;
+      overflow: auto;
+      padding: 2px 2px 8px;
+    }
+
+    .notice-card {
+      display: grid;
+      gap: 8px;
+      padding: 12px 12px 14px;
+      border-radius: 8px;
+      border: 3px solid rgba(255, 255, 255, 0.88);
+      background: linear-gradient(#ffffff, #e8fbff);
+      box-shadow: 0 4px 0 rgba(62, 113, 147, 0.22);
+    }
+
+    .notice-date {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: fit-content;
+      min-height: 28px;
+      padding: 0 10px;
+      border-radius: 999px;
+      background: linear-gradient(#ffe66d, #ffb347);
+      color: #26345d;
+      font-size: 12px;
+      font-weight: 950;
+      letter-spacing: 0;
+    }
+
+    .notice-body {
+      color: #1f2d4d;
+      font-size: 15px;
+      line-height: 1.45;
+      font-weight: 850;
+    }
+
+    .notice-actions {
+      display: grid;
+      grid-template-columns: 1fr;
+      margin-top: auto;
+    }
+
+    .notice-actions button {
+      min-height: 52px;
+      border: 3px solid rgba(255, 255, 255, 0.9);
+      background: linear-gradient(#ffffff, #dff7ff);
+      color: #26345d;
+      font-size: 16px;
+    }
+
     .course-badge {
       width: 100%;
       margin-top: 8px;
@@ -823,7 +898,7 @@
           <button id="courseButton" type="button">コース</button>
           <button id="settingsButton" type="button">せってい</button>
           <button id="rankingButton" type="button">ランキング</button>
-          <button type="button">おしらせ</button>
+          <button id="noticeButton" type="button">おしらせ</button>
         </nav>
       </div>
     </section>
@@ -908,6 +983,14 @@
         <button id="rankingResetButton" class="reset-button" type="button">ランキングをリセット</button>
       </div>
     </section>
+
+    <section id="noticeScreen" class="overlay notice-screen hidden" aria-label="おしらせ">
+      <h2 class="notice-title">おしらせ</h2>
+      <div id="noticeList" class="notice-list" aria-label="おしらせ一覧"></div>
+      <div class="notice-actions">
+        <button id="noticeBackButton" type="button">もどる</button>
+      </div>
+    </section>
   </main>
 
   <script>
@@ -921,6 +1004,7 @@
       const courseButton = document.getElementById("courseButton");
       const settingsButton = document.getElementById("settingsButton");
       const rankingButton = document.getElementById("rankingButton");
+      const noticeButton = document.getElementById("noticeButton");
       const backButton = document.getElementById("backButton");
       const jumpButton = document.getElementById("jumpButton");
       const lapValue = document.getElementById("lapValue");
@@ -949,6 +1033,9 @@
       const rankingList = document.getElementById("rankingList");
       const rankingBackButton = document.getElementById("rankingBackButton");
       const rankingResetButton = document.getElementById("rankingResetButton");
+      const noticeScreen = document.getElementById("noticeScreen");
+      const noticeList = document.getElementById("noticeList");
+      const noticeBackButton = document.getElementById("noticeBackButton");
 
       const VIEW_W = 390;
       const VIEW_H = 844;
@@ -1094,6 +1181,21 @@
             { value: "normal", label: "ふつう" },
             { value: "hard", label: "むずかしい" }
           ]
+        }
+      ];
+
+      const notices = [
+        {
+          date: "2026/05/05",
+          text: "ころころレース開発中！"
+        },
+        {
+          date: "2026/05/05",
+          text: "MIKAROでおうちリビングコースを走れるようになりました"
+        },
+        {
+          date: "2026/05/05",
+          text: "キャラクター、コース、設定、ランキング画面を追加しました"
         }
       ];
 
@@ -1253,6 +1355,26 @@
         });
       }
 
+      function renderNotices() {
+        noticeList.innerHTML = "";
+
+        for (const notice of notices) {
+          const card = document.createElement("article");
+          card.className = "notice-card";
+
+          const date = document.createElement("div");
+          date.className = "notice-date";
+          date.textContent = notice.date;
+
+          const body = document.createElement("div");
+          body.className = "notice-body";
+          body.textContent = notice.text;
+
+          card.append(date, body);
+          noticeList.appendChild(card);
+        }
+      }
+
       function renderSettings() {
         settingsPanel.innerHTML = "";
         for (const group of settingGroups) {
@@ -1375,6 +1497,7 @@
         courseScreen.classList.add("hidden");
         settingsScreen.classList.add("hidden");
         rankingScreen.classList.add("hidden");
+        noticeScreen.classList.add("hidden");
         raceUi.classList.remove("hidden");
       }
 
@@ -1385,6 +1508,7 @@
         courseScreen.classList.add("hidden");
         settingsScreen.classList.add("hidden");
         rankingScreen.classList.add("hidden");
+        noticeScreen.classList.add("hidden");
         raceUi.classList.add("hidden");
       }
 
@@ -1396,6 +1520,7 @@
         courseScreen.classList.add("hidden");
         settingsScreen.classList.add("hidden");
         rankingScreen.classList.add("hidden");
+        noticeScreen.classList.add("hidden");
         characterScreen.classList.remove("hidden");
         renderCharacterSelect();
       }
@@ -1413,6 +1538,7 @@
         characterScreen.classList.add("hidden");
         settingsScreen.classList.add("hidden");
         rankingScreen.classList.add("hidden");
+        noticeScreen.classList.add("hidden");
         courseScreen.classList.remove("hidden");
         renderCourseGrid();
       }
@@ -1429,6 +1555,7 @@
         characterScreen.classList.add("hidden");
         courseScreen.classList.add("hidden");
         rankingScreen.classList.add("hidden");
+        noticeScreen.classList.add("hidden");
         settingsScreen.classList.remove("hidden");
         renderSettings();
       }
@@ -1440,6 +1567,7 @@
         characterScreen.classList.add("hidden");
         courseScreen.classList.add("hidden");
         settingsScreen.classList.add("hidden");
+        noticeScreen.classList.add("hidden");
         rankingScreen.classList.remove("hidden");
         renderRankings();
       }
@@ -1447,6 +1575,18 @@
       function resetRankings() {
         saveRankings([]);
         renderRankings();
+      }
+
+      function showNotice() {
+        state = "notice";
+        titleScreen.classList.add("hidden");
+        raceUi.classList.add("hidden");
+        characterScreen.classList.add("hidden");
+        courseScreen.classList.add("hidden");
+        settingsScreen.classList.add("hidden");
+        rankingScreen.classList.add("hidden");
+        noticeScreen.classList.remove("hidden");
+        renderNotices();
       }
 
       function jump() {
@@ -1935,6 +2075,7 @@
       courseButton.addEventListener("click", showCourseSelect);
       settingsButton.addEventListener("click", showSettings);
       rankingButton.addEventListener("click", showRanking);
+      noticeButton.addEventListener("click", showNotice);
       backButton.addEventListener("click", showTitle);
       jumpButton.addEventListener("click", jump);
       characterBackButton.addEventListener("click", showTitle);
@@ -1948,6 +2089,7 @@
       settingsBackButton.addEventListener("click", showTitle);
       rankingBackButton.addEventListener("click", showTitle);
       rankingResetButton.addEventListener("click", resetRankings);
+      noticeBackButton.addEventListener("click", showTitle);
       canvas.addEventListener("pointerdown", handlePointer);
 
       window.addEventListener("keydown", (event) => {
