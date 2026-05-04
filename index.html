@@ -212,6 +212,394 @@
       box-shadow: none;
     }
 
+    .character-screen {
+      gap: 10px;
+      justify-content: flex-start;
+      padding: max(14px, env(safe-area-inset-top)) 14px max(14px, env(safe-area-inset-bottom));
+      background:
+        linear-gradient(rgba(255, 246, 216, 0.78), rgba(255, 219, 160, 0.66)),
+        radial-gradient(circle at 20% 8%, rgba(255, 255, 255, 0.72), transparent 28%);
+      color: #26345d;
+      pointer-events: auto;
+    }
+
+    .character-title {
+      margin: 2px 0 0;
+      color: #26345d;
+      font-size: 25px;
+      line-height: 1;
+      font-weight: 950;
+      text-align: center;
+      text-shadow: 0 2px 0 rgba(255, 255, 255, 0.86);
+    }
+
+    .character-stage {
+      display: grid;
+      grid-template-columns: 132px minmax(0, 1fr);
+      gap: 12px;
+      min-height: 232px;
+      padding: 12px;
+      border: 4px solid rgba(255, 255, 255, 0.86);
+      border-radius: 8px;
+      background: linear-gradient(#fffdf3, #dff8ff);
+      box-shadow: 0 7px 0 rgba(110, 88, 54, 0.22);
+    }
+
+    .character-hero {
+      display: grid;
+      place-items: center;
+      min-height: 186px;
+      border-radius: 8px;
+      background:
+        linear-gradient(rgba(255, 255, 255, 0.52), rgba(255, 255, 255, 0.12)),
+        repeating-linear-gradient(0deg, #f7d48b 0 12px, #f9df9f 12px 24px);
+      border: 2px solid rgba(211, 147, 70, 0.32);
+    }
+
+    .character-portrait {
+      position: relative;
+      width: 106px;
+      height: 120px;
+      border-radius: 50%;
+      background: var(--body, #ffd84f);
+      box-shadow: inset 0 -10px 0 rgba(0, 0, 0, 0.08), 0 10px 0 rgba(0, 0, 0, 0.12);
+    }
+
+    .character-portrait::before,
+    .character-portrait::after {
+      content: "";
+      position: absolute;
+      top: 5px;
+      width: 28px;
+      height: 46px;
+      border-radius: 50%;
+      background: var(--ear, #3aa0ff);
+      z-index: -1;
+    }
+
+    .character-portrait::before {
+      left: -11px;
+      transform: rotate(-28deg);
+    }
+
+    .character-portrait::after {
+      right: -11px;
+      transform: rotate(28deg);
+    }
+
+    .portrait-face {
+      position: absolute;
+      left: 18px;
+      top: 33px;
+      width: 70px;
+      height: 48px;
+      border-radius: 18px;
+      background: var(--face, #111827);
+    }
+
+    .portrait-face::before,
+    .portrait-face::after {
+      content: "";
+      position: absolute;
+      top: 15px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #fff7df;
+    }
+
+    .portrait-face::before {
+      left: 17px;
+    }
+
+    .portrait-face::after {
+      right: 17px;
+    }
+
+    .character-info {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .character-name {
+      margin: 0;
+      font-size: 24px;
+      line-height: 1.05;
+      font-weight: 950;
+      color: #1f2d4d;
+    }
+
+    .character-desc {
+      min-height: 40px;
+      margin: 0;
+      color: #4b5573;
+      font-size: 13px;
+      line-height: 1.35;
+      font-weight: 750;
+    }
+
+    .stat-list {
+      display: grid;
+      gap: 7px;
+      margin-top: auto;
+    }
+
+    .stat-row {
+      display: grid;
+      grid-template-columns: 82px 1fr;
+      align-items: center;
+      gap: 7px;
+      font-size: 12px;
+      font-weight: 900;
+      color: #26345d;
+    }
+
+    .stat-track {
+      height: 14px;
+      border-radius: 999px;
+      background: #d7e4ef;
+      overflow: hidden;
+      border: 2px solid #fff;
+    }
+
+    .stat-fill {
+      width: calc(var(--value) * 20%);
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #69dbd2, #ffca3a);
+    }
+
+    .character-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 2px;
+    }
+
+    .character-card {
+      position: relative;
+      display: grid;
+      place-items: center;
+      gap: 4px;
+      min-height: 104px;
+      padding: 7px 4px 6px;
+      color: #26345d;
+      background: linear-gradient(#ffffff, #e8fbff);
+      border: 3px solid rgba(255, 255, 255, 0.9);
+      border-radius: 8px;
+      box-shadow: 0 5px 0 rgba(62, 113, 147, 0.3);
+      font-size: 11px;
+      line-height: 1;
+    }
+
+    .character-card.selected {
+      border-color: #ffb347;
+      background: linear-gradient(#fff7d2, #ffffff);
+      box-shadow: 0 5px 0 rgba(199, 122, 40, 0.38);
+    }
+
+    .character-card.selected::after {
+      content: "✓";
+      position: absolute;
+      right: 5px;
+      top: 5px;
+      display: grid;
+      place-items: center;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      color: #fff;
+      background: #31b46b;
+      font-size: 14px;
+      font-weight: 950;
+    }
+
+    .mini-portrait {
+      position: relative;
+      width: 44px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--body, #ffd84f);
+      box-shadow: inset 0 -5px 0 rgba(0, 0, 0, 0.08);
+    }
+
+    .mini-portrait::before,
+    .mini-portrait::after {
+      content: "";
+      position: absolute;
+      top: 2px;
+      width: 13px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--ear, #3aa0ff);
+      z-index: -1;
+    }
+
+    .mini-portrait::before {
+      left: -5px;
+      transform: rotate(-28deg);
+    }
+
+    .mini-portrait::after {
+      right: -5px;
+      transform: rotate(28deg);
+    }
+
+    .mini-face {
+      position: absolute;
+      left: 8px;
+      top: 14px;
+      width: 28px;
+      height: 20px;
+      border-radius: 8px;
+      background: var(--face, #111827);
+    }
+
+    .character-actions {
+      display: grid;
+      grid-template-columns: 1fr 1.25fr 1fr;
+      gap: 10px;
+      margin-top: auto;
+    }
+
+    .character-actions button {
+      min-height: 50px;
+      border: 3px solid rgba(255, 255, 255, 0.9);
+      background: linear-gradient(#ffffff, #dff7ff);
+      color: #26345d;
+      font-size: 15px;
+    }
+
+    .character-actions .confirm-button {
+      background: linear-gradient(#ffe66d, #ffb347);
+      font-size: 18px;
+    }
+
+    .course-screen {
+      gap: 12px;
+      justify-content: flex-start;
+      padding: max(14px, env(safe-area-inset-top)) 14px max(14px, env(safe-area-inset-bottom));
+      background:
+        linear-gradient(rgba(224, 248, 255, 0.84), rgba(255, 233, 168, 0.72)),
+        radial-gradient(circle at 75% 10%, rgba(255, 255, 255, 0.74), transparent 28%);
+      color: #26345d;
+      pointer-events: auto;
+    }
+
+    .course-title {
+      margin: 2px 0 0;
+      color: #26345d;
+      font-size: 25px;
+      line-height: 1;
+      font-weight: 950;
+      text-align: center;
+      text-shadow: 0 2px 0 rgba(255, 255, 255, 0.86);
+    }
+
+    .course-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    .course-card {
+      position: relative;
+      min-height: 216px;
+      padding: 8px;
+      border: 4px solid rgba(255, 255, 255, 0.9);
+      border-radius: 8px;
+      color: #26345d;
+      background: linear-gradient(#ffffff, #eafaff);
+      box-shadow: 0 6px 0 rgba(62, 113, 147, 0.28);
+      text-align: left;
+    }
+
+    .course-card.selected {
+      border-color: #ffb347;
+      background: linear-gradient(#fff7d2, #ffffff);
+      box-shadow: 0 6px 0 rgba(199, 122, 40, 0.38);
+    }
+
+    .course-card.selected::after {
+      content: "✓";
+      position: absolute;
+      right: 8px;
+      top: 8px;
+      display: grid;
+      place-items: center;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      color: #fff;
+      background: #31b46b;
+      font-size: 16px;
+      font-weight: 950;
+    }
+
+    .course-thumb {
+      height: 82px;
+      margin-bottom: 8px;
+      border-radius: 8px;
+      border: 2px solid rgba(255, 255, 255, 0.9);
+      background:
+        linear-gradient(var(--sky, #bdeeff), #fff4d2 52%, var(--floor, #f3c982) 52%),
+        linear-gradient(90deg, transparent 45%, rgba(255, 255, 255, 0.46) 45% 55%, transparent 55%);
+      overflow: hidden;
+    }
+
+    .course-card h3 {
+      min-height: 34px;
+      margin: 0 0 7px;
+      font-size: 15px;
+      line-height: 1.15;
+      font-weight: 950;
+    }
+
+    .course-meta {
+      display: grid;
+      gap: 5px;
+      font-size: 12px;
+      font-weight: 850;
+      color: #4b5573;
+    }
+
+    .course-actions {
+      display: grid;
+      grid-template-columns: 1fr 1.25fr;
+      gap: 10px;
+      margin-top: auto;
+    }
+
+    .course-actions button {
+      min-height: 52px;
+      border: 3px solid rgba(255, 255, 255, 0.9);
+      background: linear-gradient(#ffffff, #dff7ff);
+      color: #26345d;
+      font-size: 16px;
+    }
+
+    .course-actions .confirm-button {
+      background: linear-gradient(#ffe66d, #ffb347);
+      font-size: 18px;
+    }
+
+    .course-badge {
+      width: 100%;
+      margin-top: 8px;
+      padding: 6px 10px;
+      border-radius: 8px;
+      color: #26345d;
+      background: linear-gradient(#ffffff, #dff7ff);
+      border: 2px solid rgba(255, 255, 255, 0.9);
+      box-shadow: 0 3px 0 rgba(62, 113, 147, 0.25);
+      text-align: center;
+      font-size: 13px;
+      font-weight: 900;
+    }
+
     .hidden {
       display: none;
     }
@@ -229,8 +617,8 @@
       <div class="title-actions">
         <button id="startButton" class="start-button" type="button">スタート</button>
         <nav class="menu-grid" aria-label="メニュー">
-          <button type="button">キャラクター</button>
-          <button type="button">コース</button>
+          <button id="characterButton" type="button">キャラクター</button>
+          <button id="courseButton" type="button">コース</button>
           <button type="button">せってい</button>
           <button type="button">ランキング</button>
           <button type="button">おしらせ</button>
@@ -253,8 +641,53 @@
           <span id="speedValue" class="hud-value">0</span>
         </div>
       </div>
+      <div id="courseBadge" class="course-badge">おうちリビングコース</div>
       <button id="backButton" class="back-button" type="button">TITLE</button>
       <button id="jumpButton" class="jump-button" type="button">JUMP</button>
+    </section>
+
+    <section id="characterScreen" class="overlay character-screen hidden" aria-label="キャラクター選択">
+      <h2 class="character-title">キャラクターせんたく</h2>
+      <div class="character-stage">
+        <div class="character-hero" aria-hidden="true">
+          <div id="selectedPortrait" class="character-portrait">
+            <span class="portrait-face"></span>
+          </div>
+        </div>
+        <div class="character-info">
+          <h3 id="selectedName" class="character-name">MIKARO</h3>
+          <p id="selectedDesc" class="character-desc"></p>
+          <div class="stat-list" aria-label="性能">
+            <div class="stat-row">
+              <span>そくど</span>
+              <span class="stat-track"><span id="speedStat" class="stat-fill"></span></span>
+            </div>
+            <div class="stat-row">
+              <span>ハンドリング</span>
+              <span class="stat-track"><span id="handlingStat" class="stat-fill"></span></span>
+            </div>
+            <div class="stat-row">
+              <span>おもさ</span>
+              <span class="stat-track"><span id="weightStat" class="stat-fill"></span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="characterGrid" class="character-grid" aria-label="キャラクター一覧"></div>
+      <div class="character-actions">
+        <button id="characterBackButton" type="button">もどる</button>
+        <button id="characterConfirmButton" class="confirm-button" type="button">けってい</button>
+        <button id="characterHelpButton" type="button">せつめい</button>
+      </div>
+    </section>
+
+    <section id="courseScreen" class="overlay course-screen hidden" aria-label="コース選択">
+      <h2 class="course-title">コースせんたく</h2>
+      <div id="courseGrid" class="course-grid" aria-label="コース一覧"></div>
+      <div class="course-actions">
+        <button id="courseBackButton" type="button">もどる</button>
+        <button id="courseConfirmButton" class="confirm-button" type="button">けってい</button>
+      </div>
     </section>
   </main>
 
@@ -265,11 +698,29 @@
       const titleScreen = document.getElementById("titleScreen");
       const raceUi = document.getElementById("raceUi");
       const startButton = document.getElementById("startButton");
+      const characterButton = document.getElementById("characterButton");
+      const courseButton = document.getElementById("courseButton");
       const backButton = document.getElementById("backButton");
       const jumpButton = document.getElementById("jumpButton");
       const lapValue = document.getElementById("lapValue");
       const starValue = document.getElementById("starValue");
       const speedValue = document.getElementById("speedValue");
+      const courseBadge = document.getElementById("courseBadge");
+      const characterScreen = document.getElementById("characterScreen");
+      const characterGrid = document.getElementById("characterGrid");
+      const selectedPortrait = document.getElementById("selectedPortrait");
+      const selectedName = document.getElementById("selectedName");
+      const selectedDesc = document.getElementById("selectedDesc");
+      const speedStat = document.getElementById("speedStat");
+      const handlingStat = document.getElementById("handlingStat");
+      const weightStat = document.getElementById("weightStat");
+      const characterBackButton = document.getElementById("characterBackButton");
+      const characterConfirmButton = document.getElementById("characterConfirmButton");
+      const characterHelpButton = document.getElementById("characterHelpButton");
+      const courseScreen = document.getElementById("courseScreen");
+      const courseGrid = document.getElementById("courseGrid");
+      const courseBackButton = document.getElementById("courseBackButton");
+      const courseConfirmButton = document.getElementById("courseConfirmButton");
 
       const VIEW_W = 390;
       const VIEW_H = 844;
@@ -281,6 +732,96 @@
 
       let state = "title";
       let lastTime = performance.now();
+      let selectedCharacterId = "mikaro";
+      let confirmedCharacterId = "mikaro";
+      let selectedCourseId = "living";
+      let confirmedCourseId = "living";
+
+      const characters = [
+        {
+          id: "mikaro",
+          name: "MIKARO",
+          desc: "まんなか性能であつかいやすい、ころころレースの基本キャラ。",
+          stats: { speed: 3, handling: 4, weight: 3 },
+          colors: { body: "#ffd84f", face: "#111827", ear: "#3aa0ff" }
+        },
+        {
+          id: "pitokoro",
+          name: "ピトコロ",
+          desc: "小さくて曲がりやすい。細かいよけかたが得意。",
+          stats: { speed: 3, handling: 5, weight: 2 },
+          colors: { body: "#ff9fbd", face: "#2f2340", ear: "#ffd166" }
+        },
+        {
+          id: "marinkaba",
+          name: "マリンカバ",
+          desc: "重くてぶつかりに強い。ゆっくり安定して走れる。",
+          stats: { speed: 2, handling: 2, weight: 5 },
+          colors: { body: "#69d2e7", face: "#12324a", ear: "#4ecdc4" }
+        },
+        {
+          id: "fuwaro",
+          name: "フワロ",
+          desc: "ふわっと軽いジャンプが得意。空中で見やすい。",
+          stats: { speed: 4, handling: 4, weight: 1 },
+          colors: { body: "#f7f4ff", face: "#2f2a58", ear: "#b388ff" }
+        },
+        {
+          id: "muro",
+          name: "ムーロ",
+          desc: "じわっと速くなる力もち。直線で頼れる。",
+          stats: { speed: 4, handling: 2, weight: 4 },
+          colors: { body: "#8bd45c", face: "#20351f", ear: "#ffca3a" }
+        },
+        {
+          id: "kakubake",
+          name: "カクバケ",
+          desc: "カクカク動くふしぎキャラ。切り返しがすばやい。",
+          stats: { speed: 3, handling: 5, weight: 3 },
+          colors: { body: "#ff8c42", face: "#2d1f18", ear: "#5ac8fa" }
+        },
+        {
+          id: "takoron",
+          name: "タコロン",
+          desc: "すべるように走る。スピードの伸びが気持ちいい。",
+          stats: { speed: 5, handling: 3, weight: 2 },
+          colors: { body: "#f25f5c", face: "#3a1420", ear: "#ffb3c1" }
+        },
+        {
+          id: "zono",
+          name: "ゾノ",
+          desc: "どっしり安定。障害物のあとも立て直しやすい。",
+          stats: { speed: 2, handling: 3, weight: 5 },
+          colors: { body: "#c7b299", face: "#2f2720", ear: "#8ed081" }
+        }
+      ];
+
+      const courses = [
+        {
+          id: "living",
+          name: "おうちリビングコース",
+          meta: { difficulty: "やさしい", curve: "ふつう", items: "おおめ" },
+          colors: { sky: "#bdeeff", floor: "#f3c982" }
+        },
+        {
+          id: "toybox",
+          name: "おもちゃばこコース",
+          meta: { difficulty: "ふつう", curve: "おおめ", items: "とてもおおい" },
+          colors: { sky: "#ffd3d9", floor: "#ffca3a" }
+        },
+        {
+          id: "window",
+          name: "まどぎわカーブコース",
+          meta: { difficulty: "ふつう", curve: "とてもおおい", items: "ふつう" },
+          colors: { sky: "#9ee7ff", floor: "#d7f4ce" }
+        },
+        {
+          id: "night",
+          name: "よるのほしぞらコース",
+          meta: { difficulty: "むずかしい", curve: "おおめ", items: "すくなめ" },
+          colors: { sky: "#34406d", floor: "#8d69e8" }
+        }
+      ];
 
       const player = {
         lane: 0,
@@ -298,12 +839,13 @@
       let worldObjects = [];
 
       function resetRace() {
+        const character = getCharacter(confirmedCharacterId);
         player.lane = 0;
         player.targetLane = 0;
         player.y = 0;
         player.jump = 0;
         player.jumpVelocity = 0;
-        player.speed = 92;
+        player.speed = 82 + character.stats.speed * 5;
         player.distance = 0;
         player.lap = 1;
         player.stars = 0;
@@ -326,17 +868,141 @@
         return objects;
       }
 
+      function getCharacter(id) {
+        return characters.find((character) => character.id === id) || characters[0];
+      }
+
+      function getCourse(id) {
+        return courses.find((course) => course.id === id) || courses[0];
+      }
+
+      function setCharacterColors(element, character) {
+        element.style.setProperty("--body", character.colors.body);
+        element.style.setProperty("--face", character.colors.face);
+        element.style.setProperty("--ear", character.colors.ear);
+      }
+
+      function renderCharacterGrid() {
+        characterGrid.innerHTML = "";
+        for (const character of characters) {
+          const card = document.createElement("button");
+          card.type = "button";
+          card.className = `character-card${character.id === selectedCharacterId ? " selected" : ""}`;
+          card.dataset.characterId = character.id;
+          card.setAttribute("aria-pressed", String(character.id === selectedCharacterId));
+
+          const portrait = document.createElement("span");
+          portrait.className = "mini-portrait";
+          setCharacterColors(portrait, character);
+
+          const face = document.createElement("span");
+          face.className = "mini-face";
+          portrait.appendChild(face);
+
+          const label = document.createElement("span");
+          label.textContent = character.name;
+
+          card.append(portrait, label);
+          card.addEventListener("click", () => {
+            selectedCharacterId = character.id;
+            renderCharacterSelect();
+          });
+          characterGrid.appendChild(card);
+        }
+      }
+
+      function renderCharacterSelect() {
+        const character = getCharacter(selectedCharacterId);
+        setCharacterColors(selectedPortrait, character);
+        selectedName.textContent = character.name;
+        selectedDesc.textContent = character.desc;
+        speedStat.style.setProperty("--value", character.stats.speed);
+        handlingStat.style.setProperty("--value", character.stats.handling);
+        weightStat.style.setProperty("--value", character.stats.weight);
+        renderCharacterGrid();
+      }
+
+      function renderCourseGrid() {
+        courseGrid.innerHTML = "";
+        for (const course of courses) {
+          const card = document.createElement("button");
+          card.type = "button";
+          card.className = `course-card${course.id === selectedCourseId ? " selected" : ""}`;
+          card.dataset.courseId = course.id;
+          card.setAttribute("aria-pressed", String(course.id === selectedCourseId));
+
+          const thumb = document.createElement("div");
+          thumb.className = "course-thumb";
+          thumb.style.setProperty("--sky", course.colors.sky);
+          thumb.style.setProperty("--floor", course.colors.floor);
+
+          const title = document.createElement("h3");
+          title.textContent = course.name;
+
+          const meta = document.createElement("div");
+          meta.className = "course-meta";
+          meta.innerHTML = `
+            <span>むずかしさ: ${course.meta.difficulty}</span>
+            <span>カーブ: ${course.meta.curve}</span>
+            <span>アイテム: ${course.meta.items}</span>
+          `;
+
+          card.append(thumb, title, meta);
+          card.addEventListener("click", () => {
+            selectedCourseId = course.id;
+            renderCourseGrid();
+          });
+          courseGrid.appendChild(card);
+        }
+      }
+
       function startRace() {
+        const course = getCourse(confirmedCourseId);
         state = "race";
         resetRace();
+        courseBadge.textContent = course.name;
         titleScreen.classList.add("hidden");
+        characterScreen.classList.add("hidden");
+        courseScreen.classList.add("hidden");
         raceUi.classList.remove("hidden");
       }
 
       function showTitle() {
         state = "title";
         titleScreen.classList.remove("hidden");
+        characterScreen.classList.add("hidden");
+        courseScreen.classList.add("hidden");
         raceUi.classList.add("hidden");
+      }
+
+      function showCharacterSelect() {
+        state = "character";
+        selectedCharacterId = confirmedCharacterId;
+        titleScreen.classList.add("hidden");
+        raceUi.classList.add("hidden");
+        courseScreen.classList.add("hidden");
+        characterScreen.classList.remove("hidden");
+        renderCharacterSelect();
+      }
+
+      function confirmCharacterSelect() {
+        confirmedCharacterId = selectedCharacterId;
+        showTitle();
+      }
+
+      function showCourseSelect() {
+        state = "course";
+        selectedCourseId = confirmedCourseId;
+        titleScreen.classList.add("hidden");
+        raceUi.classList.add("hidden");
+        characterScreen.classList.add("hidden");
+        courseScreen.classList.remove("hidden");
+        renderCourseGrid();
+      }
+
+      function confirmCourseSelect() {
+        confirmedCourseId = selectedCourseId;
+        showTitle();
       }
 
       function jump() {
@@ -604,6 +1270,7 @@
       }
 
       function drawPlayer() {
+        const character = getCharacter(confirmedCharacterId);
         const baseX = VIEW_W / 2 + player.lane * 118;
         const floatHeight = player.jump * 70;
         const baseY = VIEW_H - 118 - floatHeight;
@@ -619,7 +1286,7 @@
         ctx.translate(baseX, baseY);
         ctx.scale(1, squash);
 
-        ctx.fillStyle = "#3aa0ff";
+        ctx.fillStyle = character.colors.ear;
         ctx.beginPath();
         ctx.ellipse(-30, -24, 14, 24, -0.65, 0, Math.PI * 2);
         ctx.ellipse(30, -24, 14, 24, 0.65, 0, Math.PI * 2);
@@ -630,12 +1297,12 @@
         ctx.ellipse(28, -21, 7, 14, 0.65, 0, Math.PI * 2);
         ctx.fill();
 
-        ctx.fillStyle = "#ffd84f";
+        ctx.fillStyle = character.colors.body;
         ctx.beginPath();
         ctx.arc(0, 0, 38, 0, Math.PI * 2);
         ctx.fill();
 
-        ctx.fillStyle = "#111827";
+        ctx.fillStyle = character.colors.face;
         ctx.beginPath();
         ctx.roundRect(-26, -16, 52, 34, 14);
         ctx.fill();
@@ -656,7 +1323,7 @@
         ctx.arc(0, 6, 9, 0.1, Math.PI - 0.1);
         ctx.stroke();
 
-        ctx.fillStyle = "#f4b000";
+        ctx.fillStyle = character.colors.body;
         ctx.beginPath();
         ctx.ellipse(-18, 34, 13, 16, 0, 0, Math.PI * 2);
         ctx.ellipse(18, 34, 13, 16, 0, 0, Math.PI * 2);
@@ -690,13 +1357,16 @@
       }
 
       function updateRace(delta) {
+        const character = getCharacter(confirmedCharacterId);
+        const targetSpeed = 100 + character.stats.speed * 8;
+        const handling = 1.28 + character.stats.handling * 0.15;
         const direction = (keys.has("ArrowRight") || keys.has("KeyD") ? 1 : 0) - (keys.has("ArrowLeft") || keys.has("KeyA") ? 1 : 0);
         if (direction !== 0) {
-          player.targetLane = clamp(player.targetLane + direction * delta * 1.7, -1, 1);
+          player.targetLane = clamp(player.targetLane + direction * delta * handling, -1, 1);
         }
-        player.lane = lerp(player.lane, player.targetLane, clamp(delta * 9, 0, 1));
+        player.lane = lerp(player.lane, player.targetLane, clamp(delta * (7 + character.stats.handling), 0, 1));
 
-        player.speed = lerp(player.speed, 120, delta * 0.16);
+        player.speed = lerp(player.speed, targetSpeed, delta * 0.16);
         player.distance += player.speed * delta;
 
         if (player.distance >= COURSE_LENGTH) {
@@ -738,7 +1408,7 @@
               player.jumpVelocity = Math.max(player.jumpVelocity, 11.5);
               player.speed = Math.min(154, player.speed + 12);
             } else if (player.hitCooldown <= 0 && !(player.jump > 0.45 && object.kind === "block")) {
-              player.speed = 38;
+              player.speed = 30 + character.stats.weight * 5;
               player.hitCooldown = 0.9;
             }
           }
@@ -800,8 +1470,18 @@
       }
 
       startButton.addEventListener("click", startRace);
+      characterButton.addEventListener("click", showCharacterSelect);
+      courseButton.addEventListener("click", showCourseSelect);
       backButton.addEventListener("click", showTitle);
       jumpButton.addEventListener("click", jump);
+      characterBackButton.addEventListener("click", showTitle);
+      characterConfirmButton.addEventListener("click", confirmCharacterSelect);
+      characterHelpButton.addEventListener("click", () => {
+        const character = getCharacter(selectedCharacterId);
+        selectedDesc.textContent = `${character.desc} 下のカードをタップして、けっていでレースに使えます。`;
+      });
+      courseBackButton.addEventListener("click", showTitle);
+      courseConfirmButton.addEventListener("click", confirmCourseSelect);
       canvas.addEventListener("pointerdown", handlePointer);
 
       window.addEventListener("keydown", (event) => {
