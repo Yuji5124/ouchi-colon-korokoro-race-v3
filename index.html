@@ -671,6 +671,123 @@
       font-size: 16px;
     }
 
+    .ranking-screen {
+      gap: 12px;
+      justify-content: flex-start;
+      padding: max(14px, env(safe-area-inset-top)) 14px max(14px, env(safe-area-inset-bottom));
+      background:
+        linear-gradient(rgba(255, 246, 216, 0.88), rgba(218, 244, 255, 0.76)),
+        radial-gradient(circle at 78% 8%, rgba(255, 255, 255, 0.76), transparent 28%);
+      color: #26345d;
+      pointer-events: auto;
+    }
+
+    .ranking-title {
+      margin: 2px 0 0;
+      color: #26345d;
+      font-size: 25px;
+      line-height: 1;
+      font-weight: 950;
+      text-align: center;
+      text-shadow: 0 2px 0 rgba(255, 255, 255, 0.86);
+    }
+
+    .ranking-list {
+      display: grid;
+      gap: 8px;
+      max-height: 610px;
+      overflow: auto;
+      padding: 2px 2px 8px;
+    }
+
+    .ranking-row {
+      display: grid;
+      grid-template-columns: 34px 1fr 48px;
+      gap: 8px;
+      align-items: center;
+      min-height: 74px;
+      padding: 8px;
+      border-radius: 8px;
+      border: 3px solid rgba(255, 255, 255, 0.88);
+      background: linear-gradient(#ffffff, #e8fbff);
+      box-shadow: 0 4px 0 rgba(62, 113, 147, 0.22);
+    }
+
+    .ranking-rank {
+      display: grid;
+      place-items: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      color: #fff;
+      background: #ff9f43;
+      font-size: 16px;
+      font-weight: 950;
+    }
+
+    .ranking-main {
+      min-width: 0;
+    }
+
+    .ranking-name {
+      display: block;
+      overflow: hidden;
+      color: #1f2d4d;
+      font-size: 14px;
+      font-weight: 950;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .ranking-meta {
+      display: block;
+      margin-top: 3px;
+      overflow: hidden;
+      color: #4b5573;
+      font-size: 11px;
+      font-weight: 800;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .ranking-stars {
+      color: #d98200;
+      font-size: 17px;
+      font-weight: 950;
+      text-align: right;
+    }
+
+    .ranking-empty {
+      margin: 30px 0;
+      padding: 18px;
+      border-radius: 8px;
+      border: 3px solid rgba(255, 255, 255, 0.86);
+      background: rgba(255, 255, 255, 0.66);
+      color: #4b5573;
+      text-align: center;
+      font-size: 14px;
+      font-weight: 850;
+    }
+
+    .ranking-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: auto;
+    }
+
+    .ranking-actions button {
+      min-height: 52px;
+      border: 3px solid rgba(255, 255, 255, 0.9);
+      background: linear-gradient(#ffffff, #dff7ff);
+      color: #26345d;
+      font-size: 15px;
+    }
+
+    .ranking-actions .reset-button {
+      background: linear-gradient(#ffd3d9, #ff9f9f);
+    }
+
     .course-badge {
       width: 100%;
       margin-top: 8px;
@@ -705,7 +822,7 @@
           <button id="characterButton" type="button">キャラクター</button>
           <button id="courseButton" type="button">コース</button>
           <button id="settingsButton" type="button">せってい</button>
-          <button type="button">ランキング</button>
+          <button id="rankingButton" type="button">ランキング</button>
           <button type="button">おしらせ</button>
         </nav>
       </div>
@@ -782,6 +899,15 @@
         <button id="settingsBackButton" type="button">もどる</button>
       </div>
     </section>
+
+    <section id="rankingScreen" class="overlay ranking-screen hidden" aria-label="ランキング">
+      <h2 class="ranking-title">ランキング</h2>
+      <div id="rankingList" class="ranking-list" aria-label="ランキング一覧"></div>
+      <div class="ranking-actions">
+        <button id="rankingBackButton" type="button">もどる</button>
+        <button id="rankingResetButton" class="reset-button" type="button">ランキングをリセット</button>
+      </div>
+    </section>
   </main>
 
   <script>
@@ -794,6 +920,7 @@
       const characterButton = document.getElementById("characterButton");
       const courseButton = document.getElementById("courseButton");
       const settingsButton = document.getElementById("settingsButton");
+      const rankingButton = document.getElementById("rankingButton");
       const backButton = document.getElementById("backButton");
       const jumpButton = document.getElementById("jumpButton");
       const lapValue = document.getElementById("lapValue");
@@ -818,12 +945,17 @@
       const settingsScreen = document.getElementById("settingsScreen");
       const settingsPanel = document.getElementById("settingsPanel");
       const settingsBackButton = document.getElementById("settingsBackButton");
+      const rankingScreen = document.getElementById("rankingScreen");
+      const rankingList = document.getElementById("rankingList");
+      const rankingBackButton = document.getElementById("rankingBackButton");
+      const rankingResetButton = document.getElementById("rankingResetButton");
 
       const VIEW_W = 390;
       const VIEW_H = 844;
       const HORIZON = 238;
-      const ROAD_TOP = 74;
-      const ROAD_BOTTOM = 336;
+      const ROAD_TOP = 58;
+      const ROAD_BOTTOM = 204;
+      const RACE_VIEW_SCALE = 0.95;
       const COURSE_LENGTH = 3400;
       const keys = new Set();
 
@@ -834,6 +966,7 @@
       let selectedCourseId = "living";
       let confirmedCourseId = "living";
       const SETTINGS_STORAGE_KEY = "ouchiColonSettings";
+      const RANKING_STORAGE_KEY = "ouchiColonRankings";
       const defaultSettings = {
         bgm: "on",
         sfx: "on",
@@ -1037,6 +1170,89 @@
         }
       }
 
+      function loadRankings() {
+        try {
+          const saved = localStorage.getItem(RANKING_STORAGE_KEY);
+          const rankings = saved ? JSON.parse(saved) : [];
+          return Array.isArray(rankings) ? rankings : [];
+        } catch (error) {
+          return [];
+        }
+      }
+
+      function saveRankings(rankings) {
+        try {
+          localStorage.setItem(RANKING_STORAGE_KEY, JSON.stringify(rankings));
+        } catch (error) {
+          // localStorageが使えない環境でもゲーム自体は動かす。
+        }
+      }
+
+      function formatDateTime(date) {
+        const pad = (value) => String(value).padStart(2, "0");
+        return `${date.getFullYear()}/${pad(date.getMonth() + 1)}/${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}`;
+      }
+
+      function addRankingEntry() {
+        const character = getCharacter(confirmedCharacterId);
+        const course = getCourse(confirmedCourseId);
+        const entry = {
+          characterName: character.name,
+          courseName: course.name,
+          stars: player.stars,
+          lap: `${player.lap}/3`,
+          dateTime: formatDateTime(new Date())
+        };
+        const rankings = loadRankings()
+          .concat(entry)
+          .sort((a, b) => b.stars - a.stars)
+          .slice(0, 10);
+        saveRankings(rankings);
+      }
+
+      function renderRankings() {
+        const rankings = loadRankings()
+          .sort((a, b) => b.stars - a.stars)
+          .slice(0, 10);
+        rankingList.innerHTML = "";
+
+        if (rankings.length === 0) {
+          const empty = document.createElement("div");
+          empty.className = "ranking-empty";
+          empty.textContent = "まだランキングがありません。レースをゴールすると保存されます。";
+          rankingList.appendChild(empty);
+          return;
+        }
+
+        rankings.forEach((entry, index) => {
+          const row = document.createElement("div");
+          row.className = "ranking-row";
+
+          const rank = document.createElement("span");
+          rank.className = "ranking-rank";
+          rank.textContent = String(index + 1);
+
+          const main = document.createElement("span");
+          main.className = "ranking-main";
+
+          const name = document.createElement("span");
+          name.className = "ranking-name";
+          name.textContent = `${entry.characterName} / ${entry.courseName}`;
+
+          const meta = document.createElement("span");
+          meta.className = "ranking-meta";
+          meta.textContent = `LAP ${entry.lap} / ${entry.dateTime}`;
+
+          const stars = document.createElement("span");
+          stars.className = "ranking-stars";
+          stars.textContent = `★${entry.stars}`;
+
+          main.append(name, meta);
+          row.append(rank, main, stars);
+          rankingList.appendChild(row);
+        });
+      }
+
       function renderSettings() {
         settingsPanel.innerHTML = "";
         for (const group of settingGroups) {
@@ -1158,6 +1374,7 @@
         characterScreen.classList.add("hidden");
         courseScreen.classList.add("hidden");
         settingsScreen.classList.add("hidden");
+        rankingScreen.classList.add("hidden");
         raceUi.classList.remove("hidden");
       }
 
@@ -1167,6 +1384,7 @@
         characterScreen.classList.add("hidden");
         courseScreen.classList.add("hidden");
         settingsScreen.classList.add("hidden");
+        rankingScreen.classList.add("hidden");
         raceUi.classList.add("hidden");
       }
 
@@ -1177,6 +1395,7 @@
         raceUi.classList.add("hidden");
         courseScreen.classList.add("hidden");
         settingsScreen.classList.add("hidden");
+        rankingScreen.classList.add("hidden");
         characterScreen.classList.remove("hidden");
         renderCharacterSelect();
       }
@@ -1193,6 +1412,7 @@
         raceUi.classList.add("hidden");
         characterScreen.classList.add("hidden");
         settingsScreen.classList.add("hidden");
+        rankingScreen.classList.add("hidden");
         courseScreen.classList.remove("hidden");
         renderCourseGrid();
       }
@@ -1208,8 +1428,25 @@
         raceUi.classList.add("hidden");
         characterScreen.classList.add("hidden");
         courseScreen.classList.add("hidden");
+        rankingScreen.classList.add("hidden");
         settingsScreen.classList.remove("hidden");
         renderSettings();
+      }
+
+      function showRanking() {
+        state = "ranking";
+        titleScreen.classList.add("hidden");
+        raceUi.classList.add("hidden");
+        characterScreen.classList.add("hidden");
+        courseScreen.classList.add("hidden");
+        settingsScreen.classList.add("hidden");
+        rankingScreen.classList.remove("hidden");
+        renderRankings();
+      }
+
+      function resetRankings() {
+        saveRankings([]);
+        renderRankings();
       }
 
       function jump() {
@@ -1225,6 +1462,15 @@
 
       function lerp(a, b, t) {
         return a + (b - a) * t;
+      }
+
+      function drawRaceViewport(drawScene) {
+        ctx.save();
+        ctx.translate(VIEW_W / 2, VIEW_H / 2);
+        ctx.scale(RACE_VIEW_SCALE, RACE_VIEW_SCALE);
+        ctx.translate(-VIEW_W / 2, -VIEW_H / 2);
+        drawScene();
+        ctx.restore();
       }
 
       function project(distanceAhead, lane) {
@@ -1578,7 +1824,12 @@
 
         if (player.distance >= COURSE_LENGTH) {
           player.distance -= COURSE_LENGTH;
-          player.lap = player.lap === 3 ? 1 : player.lap + 1;
+          if (player.lap >= 3) {
+            addRankingEntry();
+            showRanking();
+            return;
+          }
+          player.lap += 1;
           worldObjects = makeObjects();
         }
 
@@ -1628,19 +1879,22 @@
 
       function drawRace() {
         drawRoomBackground(false);
-        drawRoad();
+        drawRaceViewport(() => {
+          drawRoomBackground(false);
+          drawRoad();
 
-        const visible = worldObjects
-          .filter((object) => !object.taken)
-          .map((object) => ({ object, ahead: object.distance - player.distance }))
-          .filter((entry) => entry.ahead > 20 && entry.ahead < 900)
-          .sort((a, b) => b.ahead - a.ahead);
+          const visible = worldObjects
+            .filter((object) => !object.taken)
+            .map((object) => ({ object, ahead: object.distance - player.distance }))
+            .filter((entry) => entry.ahead > 20 && entry.ahead < 900)
+            .sort((a, b) => b.ahead - a.ahead);
 
-        for (const entry of visible) {
-          drawObstacle(entry.object, project(entry.ahead, entry.object.lane));
-        }
+          for (const entry of visible) {
+            drawObstacle(entry.object, project(entry.ahead, entry.object.lane));
+          }
 
-        drawPlayer();
+          drawPlayer();
+        });
 
         if (player.hitCooldown > 0) {
           ctx.fillStyle = "rgba(255, 90, 95, 0.22)";
@@ -1680,6 +1934,7 @@
       characterButton.addEventListener("click", showCharacterSelect);
       courseButton.addEventListener("click", showCourseSelect);
       settingsButton.addEventListener("click", showSettings);
+      rankingButton.addEventListener("click", showRanking);
       backButton.addEventListener("click", showTitle);
       jumpButton.addEventListener("click", jump);
       characterBackButton.addEventListener("click", showTitle);
@@ -1691,6 +1946,8 @@
       courseBackButton.addEventListener("click", showTitle);
       courseConfirmButton.addEventListener("click", confirmCourseSelect);
       settingsBackButton.addEventListener("click", showTitle);
+      rankingBackButton.addEventListener("click", showTitle);
+      rankingResetButton.addEventListener("click", resetRankings);
       canvas.addEventListener("pointerdown", handlePointer);
 
       window.addEventListener("keydown", (event) => {
