@@ -2043,26 +2043,6 @@
 
       function drawTitleScene() {
         drawRoomBackground(true);
-        ctx.fillStyle = "rgba(255, 255, 255, 0.34)";
-        ctx.beginPath();
-        ctx.roundRect(34, 334, 322, 150, 18);
-        ctx.fill();
-        ctx.fillStyle = "#f08fb5";
-        ctx.beginPath();
-        ctx.arc(104, 422, 28, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.fillStyle = "#69d2e7";
-        ctx.fillRect(256, 390, 48, 48);
-        ctx.fillStyle = "#f9d56e";
-        ctx.beginPath();
-        ctx.moveTo(190, 350);
-        ctx.lineTo(224, 414);
-        ctx.lineTo(156, 414);
-        ctx.closePath();
-        ctx.fill();
-        player.distance += 0.9;
-        const demoPoint = project(135, Math.sin(performance.now() / 800) * 0.55);
-        drawStar(demoPoint.x, demoPoint.y - 34, 22);
       }
 
       function updateRace(delta) {
