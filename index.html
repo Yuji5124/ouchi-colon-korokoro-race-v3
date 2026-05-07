@@ -880,6 +880,17 @@
     .hidden {
       display: none;
     }
+
+    @keyframes titleBounce {
+      0%, 100% { transform: translateY(0); }
+      40%       { transform: translateY(-14px); }
+      55%       { transform: translateY(-12px); }
+      70%       { transform: translateY(-14px); }
+    }
+
+    .title-logo-img {
+      animation: titleBounce 2s ease-in-out infinite;
+    }
   </style>
 </head>
 <body>
@@ -1036,6 +1047,54 @@
       const noticeScreen = document.getElementById("noticeScreen");
       const noticeList = document.getElementById("noticeList");
       const noticeBackButton = document.getElementById("noticeBackButton");
+
+      // ── PNG 画像の読み込み ─────────────────────────────────────
+      let titleLogoImage = null;
+      let mikaroBackImage = null;
+      let livingRoomImage = null;
+
+      (() => {
+        const logo = new Image();
+        logo.onload = () => {
+          titleLogoImage = logo;
+          console.log("[画像] title_logo.png 読み込み成功");
+          const titleBlock = document.querySelector(".title-block");
+          const brand = titleBlock.querySelector(".brand");
+          const subtitle = titleBlock.querySelector(".subtitle");
+          const img = document.createElement("img");
+          img.src = "assets/ui/title_logo.png";
+          img.alt = "Ouchi Colon ころころレース";
+          img.className = "title-logo-img";
+          img.style.cssText = "display:block;width:calc(100% + 36px);height:auto;margin:0 -18px 8px;";
+          brand.style.display = "none";
+          subtitle.style.display = "none";
+          titleBlock.insertBefore(img, brand);
+        };
+        logo.onerror = () => {
+          console.log("[画像] title_logo.png 読み込み失敗 → テキスト表示にフォールバック");
+        };
+        logo.src = "assets/ui/title_logo.png";
+
+        const mikaro = new Image();
+        mikaro.onload = () => {
+          mikaroBackImage = mikaro;
+          console.log("[画像] mikaro_back.png 読み込み成功");
+        };
+        mikaro.onerror = () => {
+          console.log("[画像] mikaro_back.png 読み込み失敗 → Canvas描画にフォールバック");
+        };
+        mikaro.src = "assets/characters/mikaro_back.png";
+
+        const bg = new Image();
+        bg.onload = () => {
+          livingRoomImage = bg;
+          console.log("[画像] living_room.png 読み込み成功");
+        };
+        bg.onerror = () => {
+          console.log("[画像] living_room.png 読み込み失敗 → Canvas描画にフォールバック");
+        };
+        bg.src = "assets/backgrounds/living_room.png";
+      })();
 
       const VIEW_W = 390;
       const VIEW_H = 844;
@@ -1623,6 +1682,11 @@
       }
 
       function drawRoomBackground(isTitle = false) {
+        // レース画面でPNG背景が読み込まれていれば優先使用、なければCanvas描画にフォールバック
+        if (!isTitle && livingRoomImage) {
+          ctx.drawImage(livingRoomImage, 0, 0, VIEW_W, VIEW_H);
+          return;
+        }
         const sky = ctx.createLinearGradient(0, 0, 0, HORIZON + 90);
         sky.addColorStop(0, isTitle ? "#ffe7a8" : "#bdeeff");
         sky.addColorStop(0.62, isTitle ? "#ffd3d9" : "#e9fbff");
@@ -1874,6 +1938,20 @@
         ctx.beginPath();
         ctx.ellipse(baseX, VIEW_H - 64, 44 * shadowScale, 12 * shadowScale, 0, 0, Math.PI * 2);
         ctx.fill();
+
+        // MIKAROのPNG画像が読み込まれていれば優先使用、なければCanvas描画にフォールバック
+        if (confirmedCharacterId === "mikaro" && mikaroBackImage) {
+          const imgW = 112;
+          const imgH = imgW * (mikaroBackImage.naturalHeight / mikaroBackImage.naturalWidth);
+          // Canvasキャラクターの足元はbaseY+50付近のため、画像底辺をそこに合わせる
+          const feetY = 50;
+          ctx.save();
+          ctx.translate(baseX, baseY);
+          ctx.scale(1, squash);
+          ctx.drawImage(mikaroBackImage, -imgW / 2, feetY - imgH, imgW, imgH);
+          ctx.restore();
+          return;
+        }
 
         ctx.save();
         ctx.translate(baseX, baseY);
