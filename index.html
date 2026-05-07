@@ -1054,6 +1054,8 @@
       let livingRoomImage = null;
       let titleRoomImage = null;
       let raceRoomImage = null;
+      let starImage = null;
+      let purpleMonsterImage = null;
 
       (() => {
         const logo = new Image();
@@ -1116,6 +1118,26 @@
           console.log("[画像] race_room.png 読み込み失敗 → Canvas描画にフォールバック");
         };
         raceRoom.src = "assets/backgrounds/race_room.png";
+
+        const starImg = new Image();
+        starImg.onload = () => {
+          starImage = starImg;
+          console.log("[画像] star.png 読み込み成功");
+        };
+        starImg.onerror = () => {
+          console.log("[画像] star.png 読み込み失敗 → Canvas描画にフォールバック");
+        };
+        starImg.src = "assets/items/star.png";
+
+        const monsterImg = new Image();
+        monsterImg.onload = () => {
+          purpleMonsterImage = monsterImg;
+          console.log("[画像] purple_monster.png 読み込み成功");
+        };
+        monsterImg.onerror = () => {
+          console.log("[画像] purple_monster.png 読み込み失敗 → Canvas描画にフォールバック");
+        };
+        monsterImg.src = "assets/enemies/purple_monster.png";
       })();
 
       const VIEW_W = 390;
@@ -1874,6 +1896,11 @@
         ctx.save();
         ctx.translate(x, y);
         ctx.rotate(performance.now() / 260);
+        if (starImage) {
+          ctx.drawImage(starImage, -size, -size, size * 2, size * 2);
+          ctx.restore();
+          return;
+        }
         ctx.fillStyle = "#ffdf3f";
         ctx.strokeStyle = "#d98200";
         ctx.lineWidth = Math.max(1, size * 0.08);
@@ -1907,6 +1934,10 @@
         }
 
         if (object.kind === "enemy") {
+          if (purpleMonsterImage) {
+            ctx.drawImage(purpleMonsterImage, point.x - size * 0.4, point.y - size * 0.8, size * 0.8, size * 0.8);
+            return;
+          }
           ctx.fillStyle = "#8d69e8";
           ctx.beginPath();
           ctx.arc(point.x, point.y - size * 0.34, size * 0.38, 0, Math.PI * 2);
