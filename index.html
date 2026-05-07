@@ -1052,6 +1052,8 @@
       let titleLogoImage = null;
       let mikaroBackImage = null;
       let livingRoomImage = null;
+      let titleRoomImage = null;
+      let raceRoomImage = null;
 
       (() => {
         const logo = new Image();
@@ -1094,6 +1096,26 @@
           console.log("[画像] living_room.png 読み込み失敗 → Canvas描画にフォールバック");
         };
         bg.src = "assets/backgrounds/living_room.png";
+
+        const titleRoom = new Image();
+        titleRoom.onload = () => {
+          titleRoomImage = titleRoom;
+          console.log("[画像] title_room.png 読み込み成功");
+        };
+        titleRoom.onerror = () => {
+          console.log("[画像] title_room.png 読み込み失敗 → Canvas描画にフォールバック");
+        };
+        titleRoom.src = "assets/backgrounds/title_room.png";
+
+        const raceRoom = new Image();
+        raceRoom.onload = () => {
+          raceRoomImage = raceRoom;
+          console.log("[画像] race_room.png 読み込み成功");
+        };
+        raceRoom.onerror = () => {
+          console.log("[画像] race_room.png 読み込み失敗 → Canvas描画にフォールバック");
+        };
+        raceRoom.src = "assets/backgrounds/race_room.png";
       })();
 
       const VIEW_W = 390;
@@ -1682,7 +1704,16 @@
       }
 
       function drawRoomBackground(isTitle = false) {
-        // レース画面でPNG背景が読み込まれていれば優先使用、なければCanvas描画にフォールバック
+        // タイトル画面PNG背景（title_room → Canvas の順でフォールバック）
+        if (isTitle && titleRoomImage) {
+          ctx.drawImage(titleRoomImage, 0, 0, VIEW_W, VIEW_H);
+          return;
+        }
+        // レース画面PNG背景（race_room → living_room → Canvas の順でフォールバック）
+        if (!isTitle && raceRoomImage) {
+          ctx.drawImage(raceRoomImage, 0, 0, VIEW_W, VIEW_H);
+          return;
+        }
         if (!isTitle && livingRoomImage) {
           ctx.drawImage(livingRoomImage, 0, 0, VIEW_W, VIEW_H);
           return;
@@ -1775,8 +1806,14 @@
       }
 
       function drawRoad() {
+        // 地平線付近をグラデーションでなじませ、上部背景との境界線を目立たなくする
+        const horizonGrad = ctx.createLinearGradient(0, HORIZON, 0, HORIZON + 18);
+        horizonGrad.addColorStop(0, "rgba(243, 201, 130, 0)");
+        horizonGrad.addColorStop(1, "#f3c982");
+        ctx.fillStyle = horizonGrad;
+        ctx.fillRect(0, HORIZON, VIEW_W, 18);
         ctx.fillStyle = "#f3c982";
-        ctx.fillRect(0, HORIZON, VIEW_W, VIEW_H - HORIZON);
+        ctx.fillRect(0, HORIZON + 18, VIEW_W, VIEW_H - HORIZON - 18);
 
         ctx.fillStyle = "#65b7db";
         ctx.beginPath();
@@ -1943,8 +1980,9 @@
         if (confirmedCharacterId === "mikaro" && mikaroBackImage) {
           const imgW = 112;
           const imgH = imgW * (mikaroBackImage.naturalHeight / mikaroBackImage.naturalWidth);
-          // Canvasキャラクターの足元はbaseY+50付近のため、画像底辺をそこに合わせる
-          const feetY = 50;
+          // 画像下端から実際のホイール底面まで約8%の透明余白があるため、
+          // その分だけ下げて影（VIEW_H-64）付近に接地させる
+          const feetY = 62;
           ctx.save();
           ctx.translate(baseX, baseY);
           ctx.scale(1, squash);
