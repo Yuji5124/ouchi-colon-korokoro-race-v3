@@ -144,6 +144,18 @@
       line-height: 1.12;
       text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
       box-shadow: 0 5px 0 rgba(62, 113, 147, 0.34);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+    }
+
+    .menu-icon {
+      width: 28px;
+      height: 28px;
+      object-fit: contain;
+      display: block;
     }
 
     .race-ui {
@@ -905,11 +917,11 @@
       <div class="title-actions">
         <button id="startButton" class="start-button" type="button">スタート</button>
         <nav class="menu-grid" aria-label="メニュー">
-          <button id="characterButton" type="button">キャラクター</button>
-          <button id="courseButton" type="button">コース</button>
-          <button id="settingsButton" type="button">せってい</button>
-          <button id="rankingButton" type="button">ランキング</button>
-          <button id="noticeButton" type="button">おしらせ</button>
+          <button id="characterButton" type="button"><img src="assets/ui/icon_character.png" alt="" class="menu-icon" aria-hidden="true" onerror="this.style.display='none'">キャラクター</button>
+          <button id="courseButton" type="button"><img src="assets/ui/icon_course.png" alt="" class="menu-icon" aria-hidden="true" onerror="this.style.display='none'">コース</button>
+          <button id="settingsButton" type="button"><img src="assets/ui/icon_settings.png" alt="" class="menu-icon" aria-hidden="true" onerror="this.style.display='none'">せってい</button>
+          <button id="rankingButton" type="button"><img src="assets/ui/icon_ranking.png" alt="" class="menu-icon" aria-hidden="true" onerror="this.style.display='none'">ランキング</button>
+          <button id="noticeButton" type="button"><img src="assets/ui/icon_news.png" alt="" class="menu-icon" aria-hidden="true" onerror="this.style.display='none'">おしらせ</button>
         </nav>
       </div>
     </section>
